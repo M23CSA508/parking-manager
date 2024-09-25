@@ -1,0 +1,32 @@
+apiVersion: parking-management/v1
+kind: Deployment
+metadata:
+  name: parking-management-deployment
+  labels:
+    app: parking-management
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: parking-management
+  template:
+    metadata:
+      name: parking-management-service
+      labels:
+        app: parking-management
+    spec:
+      containers:
+        - name: parking-management
+          image: parking-management:1.0.0 # Locally built Docker image
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:h2:mem:testdb"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "sa"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: ""
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"
+      
