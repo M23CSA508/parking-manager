@@ -104,11 +104,11 @@ Local Development: Use H2 Database for testing purposes.
 Database Migration: Liquibase is used to manage the database schema changes and initial seed data.
 Local Deployment: Rancher Desktop simplifies setting up and managing a local Kubernetes environment.
 ### License
-This project is licensed under the MIT License. See the (LICENSE)[https://opensource.org/license/mit] file for more details.
+This project is licensed under the MIT License. See the [LICENSE](https://opensource.org/license/mit) file for more details.
 
 ### Contact
 For any questions, please reach out to:
 
-Email: m23csa533@iitj.ac.in,m23csa534@iitj.ac.in,m23csa508@iitj.ac.in
-GitHub: (GitHub Repository)[https://github.com/M23CSA508/parking-manager.git]
+Email: [Suvodip Som] (mailto:m23csa533@iitj.ac.in), [Swapnil Adak](mailto:m23csa534@iitj.ac.in) and [Anindya Bandopadhyay](mailto:m23csa508@iitj.ac.in)
+GitHub: [GitHub Repository](https://github.com/M23CSA508/parking-manager.git)
 
