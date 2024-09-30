@@ -105,7 +105,7 @@ databaseChangeLog:
 
         - addForeignKeyConstraint:
             baseTableName: VEHICLE
-            baseColumnNames: vehicleType
+            baseColumnNames: vehicle_type
             referencedTableName: VEHICLE_TYPE
             referencedColumnNames: type_id
             constraintName: fk_vehicle_type
@@ -163,7 +163,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: vehicle_type
-                  type: VARCHAR(50)
+                  type: BIGINT
               - column:
                   name: entry_time
                   type: TIMESTAMP
@@ -230,7 +230,7 @@ databaseChangeLog:
 
         - addForeignKeyConstraint:
             baseTableName: VEHICLE
-            baseColumnNames: vehicleType
+            baseColumnNames: vehicle_type
             referencedTableName: VEHICLE_TYPE
             referencedColumnNames: type_id
             constraintName: fk_vehicle_type

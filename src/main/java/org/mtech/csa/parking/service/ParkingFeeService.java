@@ -1,5 +1,6 @@
 package org.mtech.csa.parking.service;
 
+import lombok.AllArgsConstructor;
 import org.mtech.csa.parking.entity.ParkingFee;
 import org.mtech.csa.parking.entity.Vehicle;
 import org.mtech.csa.parking.repository.ParkingFeeRepository;
@@ -10,9 +11,9 @@ import java.math.BigDecimal;
 import java.time.Duration;
 
 @Service
+@AllArgsConstructor
 public class ParkingFeeService {
 
-    @Autowired
     private ParkingFeeRepository parkingFeeRepository;
 
     public ParkingFee calculateFee(Vehicle vehicle) {

@@ -1,6 +1,7 @@
 package org.mtech.csa.parking.entity;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 @Entity
 public class ParkingFee {
 
+    public static final ParkingFee ZERO = new ParkingFee();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long feeId;
@@ -26,5 +28,6 @@ public class ParkingFee {
     @JoinColumn(name = "parking_spot_id")
     private ParkingSpot parkingSpot;
 
+    @Column(name = "total_fee")
     private BigDecimal totalFee;
 }

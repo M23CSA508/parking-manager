@@ -1,5 +1,6 @@
 package org.mtech.csa.parking.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,14 +13,21 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 public class Vehicle {
-
+    public static final Vehicle INVALID_VEHICLE_TYPE = new Vehicle();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vehicleId;
 
+    @Column(name = "vehicle_number", nullable = false)
     private String vehicleNumber;
-    private String vehicleType;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id", nullable = false)
+    private VehicleType vehicleType;
+
+    @Column(name = "entry_time")
     private LocalDateTime entryTime;
+    @Column(name = "exit_time")
     private LocalDateTime exitTime;
 
     @ManyToOne

@@ -3,10 +3,8 @@ package org.mtech.csa.parking.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.mtech.csa.parking.tenant.TenantAwareRoutingSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -21,8 +19,8 @@ public class DataSourceConfig {
         Map<Object, Object> dataSourceMap = new HashMap<>();
 
         // For each tenant, create a DataSource (here you can load from properties or dynamically)
-        DataSource tenant1DataSource = createDataSource("jdbc:h2:mem:tenant1db", "sa", "");
-        DataSource tenant2DataSource = createDataSource("jdbc:h2:mem:tenant2db", "sa", "");
+        DataSource tenant1DataSource = createDataSource("jdbc:postgresql:tenant1db", "postgres", "admin");
+        DataSource tenant2DataSource = createDataSource("jdbc:postgresql:tenant2db", "postgres", "admin");
 
         dataSourceMap.put("tenant1", tenant1DataSource);
         dataSourceMap.put("tenant2", tenant2DataSource);

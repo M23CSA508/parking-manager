@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-init-1
+      author: M23CSA533
+      changes:
+        - sqlFile:
+

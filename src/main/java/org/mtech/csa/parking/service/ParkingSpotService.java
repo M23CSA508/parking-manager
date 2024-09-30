@@ -17,13 +17,22 @@ public class ParkingSpotService {
         return parkingSpotRepository.findByIsOccupiedFalse();
     }
 
-    public ParkingSpot assignSpot(ParkingSpot spot) {
-        spot.setIsOccupied(true);
-        return parkingSpotRepository.save(spot);
+    public ParkingSpot createParkingSpot(ParkingSpot parkingSpot) {
+        return parkingSpotRepository.save(parkingSpot);
     }
 
-    public void freeSpot(ParkingSpot spot) {
-        spot.setIsOccupied(false);
-        parkingSpotRepository.save(spot);
+    public ParkingSpot assignSpot(Long spotId) {
+        return parkingSpotAction(spotId,true);
+    }
+
+    public void freeSpot(Long spotId) {
+        parkingSpotAction(spotId,false);
+    }
+
+    private  ParkingSpot parkingSpotAction(Long spotId, boolean occupied) {
+        ParkingSpot parkingSpot = parkingSpotRepository.findById(spotId).orElse(null);
+        assert parkingSpot != null;
+        parkingSpot.setIsOccupied(occupied);
+        return parkingSpotRepository.save(parkingSpot);
     }
 }
