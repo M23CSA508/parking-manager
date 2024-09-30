@@ -10,9 +10,17 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The DataSourceConfig class configures and provides access to multiple database connections based on the current tenant.
+ */
 @Configuration
 public class DataSourceConfig {
 
+    /**
+     * Creates a DataSource bean that routes requests to different databases depending on the current tenant.
+     *
+     * @return A configured instance of TenantAwareRoutingSource which acts as a proxy for accessing various tenants' databases.
+     */
     @Bean
     public DataSource dataSource() {
         // Create map of tenant-specific data sources
@@ -33,6 +41,14 @@ public class DataSourceConfig {
         return tenantRoutingDataSource;
     }
 
+    /**
+     * Configures and returns a single DataSource object for a given database connection.
+     *
+     * @param url      The URL of the database server.
+     * @param username The username used to connect to the database.
+     * @param password The password used to connect to the database.
+     * @return An instance of HikariDataSource configured according to the provided parameters.
+     */
     private DataSource createDataSource(String url, String username, String password) {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(url);

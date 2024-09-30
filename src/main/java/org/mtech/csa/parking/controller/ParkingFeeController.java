@@ -23,9 +23,16 @@ public class ParkingFeeController {
     private ParkingFeeService parkingFeeService;
     private VehicleService vehicleService;
 
+    /**
+     * Handles GET requests to retrieve the parking fee associated with a specific vehicle number.
+     *
+     * @param vehicleNumber the unique identifier of the vehicle whose parking fee needs to be retrieved
+     * @return a ResponseEntity containing either the calculated {@link ParkingFee} object or a NOT FOUND status if no matching vehicle was found
+     */
     @GetMapping("/{vehicleNumber}")
     public ResponseEntity<ParkingFee> parkingFee(@PathVariable String vehicleNumber) {
         Optional<Vehicle> vehicleOptional = vehicleService.findVehicleByVehicleNumber(vehicleNumber);
-        return vehicleOptional.map(vehicle -> ResponseEntity.ok().body(parkingFeeService.calculateFee(vehicle))).orElseGet(() -> ResponseEntity.notFound().build());
+        return vehicleOptional.map(vehicle -> ResponseEntity.ok().body(parkingFeeService.calculateFee(vehicle)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
