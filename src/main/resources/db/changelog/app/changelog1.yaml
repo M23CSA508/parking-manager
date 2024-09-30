@@ -1,0 +1,300 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-tenant-1
+      author: M23CSA533
+      context: tenant_1
+      changes:
+        - createTable:
+            tableName: VEHICLE_TYPE
+            columns:
+              - column:
+                  name: type_id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+        - createTable:
+            tableName: VEHICLE
+            columns:
+              - column:
+                  name: vehicle_id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: vehicle_number
+                  type: VARCHAR(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vehicle_type
+                  type: BIGINT
+              - column:
+                  name: entry_time
+                  type: TIMESTAMP
+              - column:
+                  name: exit_time
+                  type: TIMESTAMP
+              - column:
+                  name: assigned_spot_id
+                  type: BIGINT
+
+        - createTable:
+            tableName: PARKING_SPOT
+            columns:
+              - column:
+                  name: spot_id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+              - column:
+                  name: level
+                  type: VARCHAR(50)
+              - column:
+                  name: spot_number
+                  type: VARCHAR(50)
+              - column:
+                  name: fee
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: fee_unit
+                  type: VARCHAR(50)
+              - column:
+                  name: is_occupied
+                  type: BOOLEAN
+
+        - createTable:
+            tableName: PARKING_FEE
+            columns:
+              - column:
+                  name: fee_id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: vehicle_id
+                  type: BIGINT
+              - column:
+                  name: parking_spot_id
+                  type: BIGINT
+              - column:
+                  name: total_fee
+                  type: DECIMAL(10, 2)
+
+        - addForeignKeyConstraint:
+            baseTableName: VEHICLE
+            baseColumnNames: assigned_spot_id
+            referencedTableName: PARKING_SPOT
+            referencedColumnNames: spot_id
+            constraintName: fk_vehicle_assigned_spot
+
+        - addForeignKeyConstraint:
+            baseTableName: VEHICLE
+            baseColumnNames: vehicleType
+            referencedTableName: VEHICLE_TYPE
+            referencedColumnNames: type_id
+            constraintName: fk_vehicle_type
+
+        - addForeignKeyConstraint:
+            baseTableName: PARKING_FEE
+            baseColumnNames: vehicle_id
+            referencedTableName: VEHICLE
+            referencedColumnNames: vehicle_id
+            constraintName: fk_parking_fee_vehicle
+
+        - addForeignKeyConstraint:
+            baseTableName: PARKING_FEE
+            baseColumnNames: parking_spot_id
+            referencedTableName: PARKING_SPOT
+            referencedColumnNames: spot_id
+            constraintName: fk_parking_fee_parking_spot
+
+  - changeSet:
+      id: 1-tenant-2
+      author: M23CSA533
+      context: tenant_2
+      changes:
+        - createTable:
+            tableName: VEHICLE_TYPE
+            columns:
+              - column:
+                  name: type_id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+        - createTable:
+            tableName: VEHICLE
+            columns:
+              - column:
+                  name: vehicle_id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: vehicle_number
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vehicle_type
+                  type: VARCHAR(50)
+              - column:
+                  name: entry_time
+                  type: TIMESTAMP
+              - column:
+                  name: exit_time
+                  type: TIMESTAMP
+              - column:
+                  name: assigned_spot_id
+                  type: BIGINT
+
+        - createTable:
+            tableName: PARKING_SPOT
+            columns:
+              - column:
+                  name: spot_id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+              - column:
+                  name: level
+                  type: VARCHAR(50)
+              - column:
+                  name: spot_number
+                  type: VARCHAR(50)
+              - column:
+                  name: fee
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: fee_unit
+                  type: VARCHAR(50)
+              - column:
+                  name: is_occupied
+                  type: BOOLEAN
+
+        - createTable:
+            tableName: PARKING_FEE
+            columns:
+              - column:
+                  name: fee_id
+                  type: BIGINT AUTO_INCREMENT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: vehicle_id
+                  type: BIGINT
+              - column:
+                  name: parking_spot_id
+                  type: BIGINT
+              - column:
+                  name: total_fee
+                  type: DECIMAL(10, 2)
+
+        - addForeignKeyConstraint:
+            baseTableName: VEHICLE
+            baseColumnNames: assigned_spot_id
+            referencedTableName: PARKING_SPOT
+            referencedColumnNames: spot_id
+            constraintName: fk_vehicle_assigned_spot
+
+        - addForeignKeyConstraint:
+            baseTableName: VEHICLE
+            baseColumnNames: vehicleType
+            referencedTableName: VEHICLE_TYPE
+            referencedColumnNames: type_id
+            constraintName: fk_vehicle_type
+
+        - addForeignKeyConstraint:
+            baseTableName: PARKING_FEE
+            baseColumnNames: vehicle_id
+            referencedTableName: VEHICLE
+            referencedColumnNames: vehicle_id
+            constraintName: fk_parking_fee_vehicle
+
+        - addForeignKeyConstraint:
+            baseTableName: PARKING_FEE
+            baseColumnNames: parking_spot_id
+            referencedTableName: PARKING_SPOT
+            referencedColumnNames: spot_id
+            constraintName: fk_parking_fee_parking_spot
+
+  - changeSet:
+      id: 3-insert-vehicle-types
+      author: M23CSA533
+      changes:
+        - insert:
+            tableName: VEHICLE_TYPE
+            columns:
+              - column:
+                  name: type_name
+                  value: "Car"
+              - column:
+                  name: description
+                  value: "Standard passenger car"
+        - insert:
+            tableName: VEHICLE_TYPE
+            columns:
+              - column:
+                  name: type_name
+                  value: "Motorcycle"
+              - column:
+                  name: description
+                  value: "Two-wheeled motor vehicle"
+        - insert:
+            tableName: VEHICLE_TYPE
+            columns:
+              - column:
+                  name: type_name
+                  value: "Truck"
+              - column:
+                  name: description
+                  value: "Large motor vehicle for transporting goods"
+        - insert:
+            tableName: VEHICLE_TYPE
+            columns:
+              - column:
+                  name: type_name
+                  value: "Bus"
+              - column:
+                  name: description
+                  value: "Large vehicle for carrying many passengers"
+        - insert:
+            tableName: VEHICLE_TYPE
+            columns:
+              - column:
+                  name: type_name
+                  value: "Bicycle"
+              - column:
+                  name: description
+                  value: "Human-powered vehicle with two wheels"
