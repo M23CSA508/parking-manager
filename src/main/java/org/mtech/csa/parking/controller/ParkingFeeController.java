@@ -3,7 +3,6 @@ package org.mtech.csa.parking.controller;
 import lombok.AllArgsConstructor;
 import org.mtech.csa.parking.entity.ParkingFee;
 import org.mtech.csa.parking.entity.Vehicle;
-import org.mtech.csa.parking.repository.ParkingFeeRepository;
 import org.mtech.csa.parking.service.ParkingFeeService;
 import org.mtech.csa.parking.service.VehicleService;
 import org.springframework.http.ResponseEntity;

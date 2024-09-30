@@ -2,20 +2,25 @@ package org.mtech.csa.parking.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.AllArgsConstructor;
 import org.mtech.csa.parking.tenant.TenantAwareRoutingSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * The DataSourceConfig class configures and provides access to multiple database connections based on the current tenant.
  */
+@AllArgsConstructor
 @Configuration
 public class DataSourceConfig {
 
+    private Environment env;
     /**
      * Creates a DataSource bean that routes requests to different databases depending on the current tenant.
      *
@@ -25,18 +30,34 @@ public class DataSourceConfig {
     public DataSource dataSource() {
         // Create map of tenant-specific data sources
         Map<Object, Object> dataSourceMap = new HashMap<>();
+        String tenants = env.getProperty("parking.manager.tenants");
+        assert tenants != null;
+        String[] tenantArr = tenants.split(",");
 
-        // For each tenant, create a DataSource (here you can load from properties or dynamically)
-        DataSource tenant1DataSource = createDataSource("jdbc:postgresql:tenant1db", "postgres", "admin");
-        DataSource tenant2DataSource = createDataSource("jdbc:postgresql:tenant2db", "postgres", "admin");
-
-        dataSourceMap.put("tenant1", tenant1DataSource);
-        dataSourceMap.put("tenant2", tenant2DataSource);
+        for (String tenant : tenantArr) {
+            if (!tenant.trim().isEmpty()) {
+                String driverClassName = env.getProperty("spring."+tenant+".datasource.driver-class-name");
+                String url = env.getProperty("spring."+tenant+".datasource.url");
+                String username = env.getProperty("spring."+tenant+".datasource.username");
+                String password = env.getProperty("spring."+tenant+".datasource.password");
+                dataSourceMap.put(tenant, createDataSource(driverClassName, url, username, password));
+            }
+        }
+//        // For each tenant, create a DataSource (here you can load from properties or dynamically)
+//        DataSource tenant1DataSource = createDataSource("jdbc:postgresql:tenant1db", "postgres", "admin");
+//        DataSource tenant2DataSource = createDataSource("jdbc:postgresql:tenant2db", "postgres", "admin");
+//
+//        dataSourceMap.put("tenant1", tenant1DataSource);
+//        dataSourceMap.put("tenant2", tenant2DataSource);
 
         // Create routing source
         TenantAwareRoutingSource tenantRoutingDataSource = new TenantAwareRoutingSource();
         tenantRoutingDataSource.setTargetDataSources(dataSourceMap);
-        tenantRoutingDataSource.setDefaultTargetDataSource(tenant1DataSource);
+        tenantRoutingDataSource.setDefaultTargetDataSource(
+                createDataSource(env.getProperty("spring.datasource.driver-class-name"),
+                        env.getProperty("spring.datasource.url"),
+                        env.getProperty("spring.datasource.username"),
+                        env.getProperty("spring.datasource.password")));
 
         return tenantRoutingDataSource;
     }
@@ -49,11 +70,18 @@ public class DataSourceConfig {
      * @param password The password used to connect to the database.
      * @return An instance of HikariDataSource configured according to the provided parameters.
      */
-    private DataSource createDataSource(String url, String username, String password) {
+    private HikariDataSource createDataSource(String jdbcDriveClass, String url, String username, String password) {
+        HikariConfig hikariConfig = createHikariConfig(jdbcDriveClass, url, username, password);
+        return new HikariDataSource(hikariConfig);
+    }
+
+    private static HikariConfig createHikariConfig(String driverClass, String url, String username, String password) {
         HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setDriverClassName(driverClass);
         hikariConfig.setJdbcUrl(url);
         hikariConfig.setUsername(username);
         hikariConfig.setPassword(password);
-        return new HikariDataSource(hikariConfig);
+        return hikariConfig;
     }
+
 }
