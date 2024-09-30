@@ -43,14 +43,20 @@ Prerequisites
 ### Build and Run
 Clone the Repository:
 
-```git clone https://github.com/M23CSA508/parking-manager.git
-cd parking-manager```
+```
+git clone https://github.com/M23CSA508/parking-manager.git
+cd parking-manager
+```
 Build the Project: Use Maven to compile the code and create an executable JAR.
 
-```mvn clean install```
+```
+mvn clean install
+```
 Run the Application: Run the application using the Spring Boot Maven plugin.
 
-```mvn spring-boot:run```
+```
+mvn spring-boot:run
+```
 Database Configuration:
 
 H2 Database: For development, configure the application.yml file to use H2.
@@ -59,10 +65,14 @@ PostgreSQL: Set up connection details in application.yml for a PostgreSQL instan
 ### Deploy to Kubernetes
 Build Docker Image: Build the application Docker image.
 
-```docker build -t parking-management-solution .```
+```
+docker build -t parking-management-solution .
+```
 Deploy to Kubernetes: Use Rancher Desktop to manage your Kubernetes cluster locally.
 
-```kubectl apply -f kubernetes/deployment.yaml```
+```
+kubectl apply -f deployment.yaml
+```
 Accessing the Application
 The REST APIs can be accessed using a tool like Postman or cURL.
 
