@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 public class Vehicle {
-    public static final Vehicle INVALID_VEHICLE_TYPE = new Vehicle();
+    public static final Vehicle INVALID_VEHICLE = new Vehicle();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vehicleId;
@@ -25,12 +25,12 @@ public class Vehicle {
     @JoinColumn(name = "type_id", nullable = false)
     private VehicleType vehicleType;
 
-    @Column(name = "entry_time")
+    @Column(name = "entry_time", nullable = false)
     private LocalDateTime entryTime;
     @Column(name = "exit_time")
     private LocalDateTime exitTime;
 
     @ManyToOne
-    @JoinColumn(name = "spot_id")
+    @JoinColumn(name = "spot_id", nullable = false)
     private ParkingSpot assignedSpot;
 }

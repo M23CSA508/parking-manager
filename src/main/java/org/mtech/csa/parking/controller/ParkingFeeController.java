@@ -32,6 +32,6 @@ public class ParkingFeeController {
     public ResponseEntity<ParkingFee> parkingFee(@PathVariable String vehicleNumber) {
         Optional<Vehicle> vehicleOptional = vehicleService.findVehicleByVehicleNumber(vehicleNumber);
         return vehicleOptional.map(vehicle -> ResponseEntity.ok().body(parkingFeeService.calculateFee(vehicle)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 }

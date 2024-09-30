@@ -1,8 +1,10 @@
 package org.mtech.csa.parking.service;
 
 import lombok.AllArgsConstructor;
+import org.mtech.csa.parking.entity.ParkingSpot;
 import org.mtech.csa.parking.entity.Vehicle;
 import org.mtech.csa.parking.entity.VehicleType;
+import org.mtech.csa.parking.repository.ParkingSpotRepository;
 import org.mtech.csa.parking.repository.VehicleRepository;
 import org.mtech.csa.parking.repository.VehicleTypeRepository;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.Optional;
 @Service
 public class VehicleService {
 
+    private ParkingSpotRepository parkingSpotRepository;
     private VehicleRepository vehicleRepository;
     private VehicleTypeRepository vehicleTypeRepository;
 
@@ -24,18 +27,21 @@ public class VehicleService {
      * @param type          the type of the vehicle
      * @return the created Vehicle object or INVALID_VEHICLE_TYPE if the vehicle type does not exist
      */
-    public Vehicle createVehicleEntry(String vehicleNumber, String type) {
+    public Vehicle createVehicleEntry(String vehicleNumber, String type, String parkingSpotId) {
         Vehicle vehicle = new Vehicle();
-
+        Optional<ParkingSpot> parkingSpotOptional = parkingSpotRepository.findById(Long.valueOf(parkingSpotId));
         Optional<VehicleType> vehicleTypeOptional = vehicleTypeRepository.findByTypeName(type);
-        if (vehicleTypeOptional.isPresent()) {
+        if (vehicleTypeOptional.isPresent() && parkingSpotOptional.isPresent()) {
+            ParkingSpot parkingSpot = parkingSpotOptional.get();
+            parkingSpot.setIsOccupied(Boolean.TRUE);
             vehicle.setVehicleNumber(vehicleNumber);
             vehicle.setVehicleType(vehicleTypeOptional.get());
             vehicle.setEntryTime(LocalDateTime.now());
+            vehicle.setAssignedSpot(parkingSpot);
             return vehicleRepository.save(vehicle);
         }
 
-        return Vehicle.INVALID_VEHICLE_TYPE;
+        return Vehicle.INVALID_VEHICLE;
     }
 
     /**
@@ -47,6 +53,7 @@ public class VehicleService {
     public Vehicle processVehicleExit(Long vehicleId) {
         Vehicle vehicle = vehicleRepository.findById(vehicleId).orElseThrow();
         vehicle.setExitTime(LocalDateTime.now());
+        vehicle.getAssignedSpot().setIsOccupied(Boolean.FALSE);
         return vehicleRepository.save(vehicle);
     }
 
@@ -57,6 +64,6 @@ public class VehicleService {
      * @return an Optional containing the found Vehicle object, or empty if no matching vehicle exists
      */
     public Optional<Vehicle> findVehicleByVehicleNumber(String vehicleNumber) {
-        return vehicleRepository.findByVehicleNumber(vehicleNumber);
+        return vehicleRepository.findByVehicleNumberAndExitTimeIsNotNull(vehicleNumber);
     }
 }

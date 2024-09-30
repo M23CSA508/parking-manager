@@ -41,6 +41,7 @@ public class ParkingSpotController {
      */
     @PostMapping
     public ResponseEntity<ParkingSpot> createParkingSpot(@RequestBody ParkingSpot parkingSpot) {
+        parkingSpot.setIsOccupied(Boolean.FALSE);
         ParkingSpot createdParkingSpot = parkingSpotService.createParkingSpot(parkingSpot);
         return new ResponseEntity<>(createdParkingSpot, HttpStatus.CREATED);
     }

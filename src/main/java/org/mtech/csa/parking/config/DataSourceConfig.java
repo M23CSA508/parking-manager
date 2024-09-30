@@ -43,12 +43,6 @@ public class DataSourceConfig {
                 dataSourceMap.put(tenant, createDataSource(driverClassName, url, username, password));
             }
         }
-//        // For each tenant, create a DataSource (here you can load from properties or dynamically)
-//        DataSource tenant1DataSource = createDataSource("jdbc:postgresql:tenant1db", "postgres", "admin");
-//        DataSource tenant2DataSource = createDataSource("jdbc:postgresql:tenant2db", "postgres", "admin");
-//
-//        dataSourceMap.put("tenant1", tenant1DataSource);
-//        dataSourceMap.put("tenant2", tenant2DataSource);
 
         // Create routing source
         TenantAwareRoutingSource tenantRoutingDataSource = new TenantAwareRoutingSource();

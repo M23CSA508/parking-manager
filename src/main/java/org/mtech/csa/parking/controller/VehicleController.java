@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 @AllArgsConstructor
 @RestController
-@RequestMapping("/vehicles")
+@RequestMapping("/v1/vehicles")
 public class VehicleController {
 
     private VehicleService vehicleService;
@@ -27,14 +27,17 @@ public class VehicleController {
     /**
      * Creates a new vehicle entry by processing the POST request sent to /vehicles endpoint.
      *
-     * @param vehicleNumber the unique identifier number of the vehicle being created
+     * @param vehicleNumber the vehicle number of the vehicle being created
      * @param vehicleType   the type of the vehicle being created
+     * @param parkingSpotId the parking spot identifier
      * @return a ResponseEntity containing either the newly created Vehicle object or an error response if invalid input was provided
      */
-    @PostMapping
-    public ResponseEntity<Vehicle> createVehicleEntry(@RequestParam String vehicleNumber, @RequestParam String vehicleType) {
-        Vehicle vehicle = vehicleService.createVehicleEntry(vehicleNumber, vehicleType);
-        if (vehicle == Vehicle.INVALID_VEHICLE_TYPE) {
+    @PostMapping(value = "/entry", params = {"vehicleNumber", "vehicleType", "parkingSpotId"})
+    public ResponseEntity<Vehicle> createVehicleEntry(@RequestParam(value = "vehicleNumber") String vehicleNumber,
+                                                      @RequestParam(value = "vehicleType") String vehicleType,
+                                                      @RequestParam(value = "parkingSpotId") String parkingSpotId) {
+        Vehicle vehicle = vehicleService.createVehicleEntry(vehicleNumber, vehicleType, parkingSpotId);
+        if (vehicle == Vehicle.INVALID_VEHICLE) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(vehicle);
@@ -46,7 +49,7 @@ public class VehicleController {
      * @param vehicleId the ID of the vehicle whose exit time needs to be processed
      * @return a ResponseEntity containing either the updated Vehicle object or an error response if no such vehicle exists
      */
-    @PostMapping("/v1/{vehicleId}/exit")
+    @PostMapping("/{vehicleId}/exit")
     public ResponseEntity<Vehicle> processVehicleExit(@PathVariable Long vehicleId) {
         Vehicle vehicle;
         try {

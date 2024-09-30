@@ -26,6 +26,6 @@ public class ParkingSpot {
     private BigDecimal fee;
     @Column(name = "fee_unit", nullable = false)
     private String feeUnit;
-    @Column(name = "is_occupied")
-    private Boolean isOccupied;
+    @Column(name = "is_occupied", nullable = false)
+    private Boolean isOccupied = false;
 }

@@ -57,24 +57,26 @@ class VehicleControllerTest {
         // Arrange
         String vehicleNumber = "ABC123";
         String vehicleType = "Car";
+        String parkingSpotId = "1";
         Vehicle expectedVehicle = new Vehicle();
         expectedVehicle.setVehicleNumber(vehicleNumber);
         expectedVehicle.setVehicleType(new VehicleType()); // Assuming VehicleType has default constructor
         expectedVehicle.setEntryTime(LocalDateTime.now());
 
-        when(vehicleService.createVehicleEntry(eq(vehicleNumber), eq(vehicleType))).thenReturn(expectedVehicle);
+        when(vehicleService.createVehicleEntry(eq(vehicleNumber), eq(vehicleType), eq(parkingSpotId))).thenReturn(expectedVehicle);
 
         // Act & Assert
-        mockMvc.perform(post("/vehicles")
+        mockMvc.perform(post("/v1/vehicles/entry")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("vehicleNumber", vehicleNumber)
-                        .param("vehicleType", vehicleType))
+                        .param("vehicleType", vehicleType)
+                        .param("parkingSpotId", parkingSpotId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.vehicleNumber").value(equalTo(vehicleNumber)))
                 .andExpect(jsonPath("$.entryTime").exists());
 
-        verify(vehicleService).createVehicleEntry(eq(vehicleNumber), eq(vehicleType));
+        verify(vehicleService).createVehicleEntry(eq(vehicleNumber), eq(vehicleType), eq(parkingSpotId));
     }
 
     // Test case for processing vehicle exit
@@ -89,7 +91,7 @@ class VehicleControllerTest {
         when(vehicleService.processVehicleExit(eq(vehicleId))).thenReturn(expectedVehicle);
 
         // Act & Assert
-        mockMvc.perform(post("/vehicles/v1/{vehicleId}/exit", vehicleId))
+        mockMvc.perform(post("/v1/vehicles/{vehicleId}/exit", vehicleId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.vehicleId").value(equalTo(vehicleId.intValue())))
@@ -109,7 +111,7 @@ class VehicleControllerTest {
         when(vehicleService.findVehicleByVehicleNumber(eq(vehicleNumber))).thenReturn(Optional.of(expectedVehicle));
 
         // Act & Assert
-        mockMvc.perform(get("/vehicles/" + vehicleNumber))
+        mockMvc.perform(get("/v1/vehicles/" + vehicleNumber))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.vehicleNumber").value(equalTo(vehicleNumber)));
@@ -117,7 +119,5 @@ class VehicleControllerTest {
         verify(vehicleService).findVehicleByVehicleNumber(eq(vehicleNumber));
     }
 
-    // Additional test cases for edge scenarios...
 }
 
-// Note: You would typically add more detailed tests for each scenario including handling exceptions, etc., but this gives you a starting point.
