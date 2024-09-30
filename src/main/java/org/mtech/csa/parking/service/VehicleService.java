@@ -58,12 +58,22 @@ public class VehicleService {
     }
 
     /**
+     * Finds a vehicle by its number which is exited.
+     *
+     * @param vehicleNumber the number of the vehicle to search for
+     * @return an Optional containing the found Vehicle object, or empty if no matching vehicle exists
+     */
+    public Optional<Vehicle> findVehicleByVehicleNumberAndExitTimeIsNotNull(String vehicleNumber) {
+        return vehicleRepository.findByVehicleNumberAndExitTimeIsNotNull(vehicleNumber);
+    }
+
+    /**
      * Finds a vehicle by its number.
      *
      * @param vehicleNumber the number of the vehicle to search for
      * @return an Optional containing the found Vehicle object, or empty if no matching vehicle exists
      */
     public Optional<Vehicle> findVehicleByVehicleNumber(String vehicleNumber) {
-        return vehicleRepository.findByVehicleNumberAndExitTimeIsNotNull(vehicleNumber);
+        return vehicleRepository.findByVehicleNumber(vehicleNumber);
     }
 }

@@ -10,5 +10,7 @@ import java.util.Optional;
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     Optional<Vehicle> findByVehicleNumberAndExitTimeIsNotNull(String vehicleNumber);
+
+    Optional<Vehicle> findByVehicleNumber(String vehicleNumber);
 }
 
